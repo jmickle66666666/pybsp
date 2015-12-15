@@ -6,6 +6,8 @@ bspwad = None
 bspmap = None
 
 def create_segs():
+    output = []
+
     cur_seg = None
     temp_seg = None
     first_seg = None
@@ -31,7 +33,7 @@ def create_segs():
             cur_seg.line = n
             cur_seg.offset = 0
             cur_seg.side = 0
-            bspmap.segs.append(cur_seg)
+            output.append(cur_seg)
 
         if l.front != -1:
             temp_seg = omg.mapedit.Seg()
@@ -51,20 +53,25 @@ def create_segs():
             cur_seg.line = n
             cur_seg.offset = 0
             cur_seg.side = 1
-            bspmap.segs.append(cur_seg)
+            output.append(cur_seg)
+    return output
 
-def find_limits():
+def find_limits(segs):
+    #find limits of a set of segs
+
     minx = 32767
     maxx = -32767
     miny = 32767
     maxy = -32767
 
-    # you know what this does
+    # you know how to do this
+
+    return (x1,x2,y1,y2) # or something
 
 def split_dist(seg):
     return None
 
-def reverse_nodes():
+def reverse_nodes(nodelist):
     return None
 
 def create_blockmap():
@@ -72,10 +79,9 @@ def create_blockmap():
 
 # main program!
 def bsp():
-    num_tsegs = 0
-    create_segs()
+    tsegs = create_segs()
 
-    find_limits()
+    limits = find_limits(tsegs)
 
     # mapminx = lminx
     # mapmaxx = lmaxx
@@ -83,11 +89,11 @@ def bsp():
     # mapmaxy = lmaxy
 
     num_nodes = 0
-    create_node()
+    nodelist = create_node(tsegs)
 
     num_pnodes = 0
     pnode_indx = 0
-    reverse_nodes()
+    reverse_nodes(nodelist)
 
     # write built data here with omgifol, or have already done so in functions
 

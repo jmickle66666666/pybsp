@@ -13,7 +13,7 @@ def create_ssector(seg):
     return None
 
 def compute_angle(dx,dy):
-   w = math.atan2(dy, dx * (65536/(math.pi*2)));
+   w = math.atan2(dy, dx) * (65536/(math.pi*2));
 
    if(w<0): w = 65536+w
     
