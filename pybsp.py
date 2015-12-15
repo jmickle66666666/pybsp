@@ -4,6 +4,7 @@ from picknode import *
 
 bspwad = None
 bspmap = None
+mapbounds = None
 
 def create_segs():
     output = []
@@ -64,12 +65,28 @@ def find_limits(segs):
     miny = 32767
     maxy = -32767
 
-    # you know how to do this
+    for s in segs:
+        va = bspmap.vertexes[s.vx_a]
+        vb = bspmap.vertexes[s.vx_b]
 
-    return (x1,x2,y1,y2) # or something
+        if va.x < minx: minx = va.x
+        if va.x > maxx: maxx = va.x
+        if va.y < miny: miny = va.y
+        if va.y > maxy: maxy = va.y
+        if vb.x < minx: minx = vb.x
+        if vb.x > maxx: maxx = vb.x
+        if vb.y < miny: miny = vb.y
+        if vb.y > maxy: maxy = vb.y
+
+    return (minx,maxx,miny,maxy)
 
 def split_dist(seg):
-    return None
+    dx = (bspmap.vertexes[bspmap.linedefs[seg.line].vx_a].x)-(bspmap.vertexes[seg.vx_a].x)
+    dy = (bspmap.vertexes[bspmap.linedefs[seg.line].vx_a].y)-(bspmap.vertexes[seg.vx_a].y)
+
+    if (dx == 0 && dy == 0): print("Trouble in SplitDist {},{}".format(dx,dy))
+    t = math.sqrt((dx*dx) + (dy*dy))
+    return math.floor(t)
 
 def reverse_nodes(nodelist):
     return None
@@ -79,25 +96,19 @@ def create_blockmap():
 
 # main program!
 def bsp():
-    tsegs = create_segs()
+    tsegs = create_segs() #initally create segs
 
-    limits = find_limits(tsegs)
+    global mapbounds
+    mapbounds = find_limits(tsegs) #find limits of vertices, store as map limits
+    print("Map goes from X ({},{}) Y ({},{})".format(*mapbounds)); 
 
-    # mapminx = lminx
-    # mapmaxx = lmaxx
-    # mapminy = lminy
-    # mapmaxy = lmaxy
 
     num_nodes = 0
-    nodelist = create_node(tsegs)
+    nodelist = create_node(tsegs) #recursively create nodes
 
     num_pnodes = 0
     pnode_indx = 0
     reverse_nodes(nodelist)
-
-    # write built data here with omgifol, or have already done so in functions
-
-    # end write
 
     blockmap_size = create_blockmap()
 

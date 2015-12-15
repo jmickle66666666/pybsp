@@ -1,6 +1,6 @@
 import math
 
-def create_node():
+def create_node(segs):
     return None
 
 def divide_segs(temp_seg,right_seg,left_seg):
